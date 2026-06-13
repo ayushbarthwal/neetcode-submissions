@@ -3,40 +3,36 @@ public:
 
     string encode(vector<string>& strs) {
         if(strs.empty()) return "";
-        vector<int> sizes;
-        string r = "";
+        string a;
         for(string s: strs){
-            sizes.push_back(s.size());
+            a += to_string(s.size()) + ',';
         }
-        for(int s: sizes){
-            r+= to_string(s) + ',';
+        a+='#';
+        for(string s:strs){
+            a+=s;
         }
-        r+='#';
-        for(string s: strs){
-            r+=s;
-        }
-        return r;
+        return a;
     }
 
     vector<string> decode(string s) {
-        if(s=="") return {};
-        vector<int> sizes;
-        vector<string> res;
+        if(s.empty()) return {};
         int i = 0;
+        int j = 0;
+        vector<int> sizes;
         while(s[i]!='#'){
-            string curr = "";
-            while(s[i]!=','){
-                curr += s[i];
-                i++;
+            while(s[j]!=','){
+                j++;
             }
-            sizes.push_back(stoi(curr));
-            i++;
+            sizes.push_back(stoi(s.substr(i,j-i)));
+            j++;
+            i = j;
         }
         i++;
-        for(int size: sizes){
-            res.push_back(s.substr(i,size));
-            i+=size;
+        vector<string> ans;
+        for(int len: sizes){
+            ans.push_back(s.substr(i,len));
+            i+=len;
         }
-        return res;
+        return ans;
     }
 };
